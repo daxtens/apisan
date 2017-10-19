@@ -112,11 +112,8 @@ class ExecNode(object):
         return result
 
 class ExecTree(object):
-    def __init__(self, xml):
-        self.xml = xml
-
-    def parse(self):
-        self.root = self._parse()
+    def parse(self, xml):
+        self.root = self._parse(xml)
         self._set_cmgr()
 
     def _set_cmgr(self):
@@ -140,9 +137,9 @@ class ExecTree(object):
                 stack.append((node, idx + 1))
                 stack.append((child, 0))
 
-    def _parse(self):
+    def _parse(self, xml):
         stack = []
-        stack.append((self.xml, 0, []))
+        stack.append((xml, 0, []))
 
         while True:
             xml_node, idx, children = stack.pop()
@@ -212,8 +209,8 @@ class Explorer(object):
                             return []
 
                         for root in xml:
-                            tree = ExecTree(root)
-                            tree.parse()
+                            tree = ExecTree()
+                            tree.parse(root)
                             forest.append(tree)
                     else:
                         body += line
