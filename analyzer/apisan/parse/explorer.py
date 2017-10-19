@@ -177,9 +177,9 @@ class Explorer(object):
         return result
 
     def explore_parallel(self, in_d):
-        pool = mp.Pool(processes=mp.cpu_count(),)
+        pool = mp.Pool(processes=mp.cpu_count(), maxtasksperchild=1)
         files = utils.get_all_files(in_d)
-        results = pool.map(self._explore_file, files)
+        results = pool.map(self._explore_file, files, 1)
         pool.close()
         pool.join()
         result = []
