@@ -203,7 +203,7 @@ class Explorer(object):
 
                         # XXX: tooo large file cannot be handled
                         if is_too_big(body):
-                            dbg.info("Ignore too large file : %s" % fn)
+                            dbg.info("Ignore too large chunk in file : %s" % fn)
                             continue
                         try:
                             xml = ET.fromstring(body)
