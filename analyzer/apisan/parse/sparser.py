@@ -96,6 +96,11 @@ class SParser(object):
         # XXX : needs to handle & operator
         p[0] = p[2]
 
+    def p_unary_expression_3(self, p):
+        """ unary_expression    : TIMES postfix_expression """
+        # XXX(dja) : needs to handle *deref operator
+        p[0] = p[2]
+
     def p_postfix_expression_1(self, p):
         ''' postfix_expression : primary_expression '''
         p[0] = p[1]
