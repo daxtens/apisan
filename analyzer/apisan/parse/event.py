@@ -5,6 +5,7 @@ from .sparser import SParser
 from ..lib import dbg
 
 gid = 0
+parser = SParser()
 
 class EventKind(Enum):
     Call = "@LOG_CALL"
@@ -23,7 +24,6 @@ class Event(object):
 
     def _parse_symbol(self, string):
         try:
-            parser = SParser()
             sym = parser.parse(string)
             return sym
         except Exception as e:
