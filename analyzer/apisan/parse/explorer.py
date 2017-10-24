@@ -45,35 +45,6 @@ def feed_cmgr(cmgr, node):
     return cmgr
 
 
-class ConstraintMgr(object):
-    def __init__(self):
-        self.constraints = dict()
-
-    def feed(self, node):
-        # return newly allocated ConstraintMgr if changed
-        # otherwise return null
-        event = node.event
-        if event.kind == EventKind.Assume:
-            cond = event.cond
-            if cond and cond.kind == SymbolKind.Constraint:
-                # XXX : latest gives false positives
-                if not cond.symbol in self.constraints:
-                    new = copy.deepcopy(self)
-                    new.constraints[cond.symbol] = cond.constraints
-                    return new
-
-    def __repr__(self):
-        return "CM(%s)" % repr(self.constraints)
-
-    def get(self, sym, immutable=False):
-        if sym in self.constraints:
-            cstr = self.constraints[sym]
-            if immutable:
-                return tuple(cstr)
-            else:
-                return cstr
-        return None
-
 def is_eop(node):
     return (node.event is not None
             and isinstance(node.event, EOPEvent))
