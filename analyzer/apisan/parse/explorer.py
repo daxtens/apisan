@@ -3,6 +3,7 @@ import copy
 import multiprocessing as mp
 import os
 import xml.etree.ElementTree as ET
+import time
 
 from ..lib import dbg
 from ..lib import utils
@@ -180,8 +181,13 @@ class Explorer(object):
 
     def _explore_file(self, fn):
         result = []
-        for tree in self._parse_file(fn):
+        start_time=time.time()
+        res = self._parse_file(fn)
+        dbg.info("Parsing %s took %.2fs" % (fn, time.time()-start_time))
+        start_time = time.time()
+        for tree in res:
             result.append(self.checker.process(tree))
+        dbg.info("Processing %s took %.2fs" % (fn, time.time()-start_time))
         dbg.debug("Explored: %s" % fn)
         return result
 
