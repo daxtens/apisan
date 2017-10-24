@@ -6,6 +6,7 @@ from ..lib import dbg
 
 gid = 0
 parser = SParser()
+parse_lookaside={}
 
 class EventKind(Enum):
     Call = "@LOG_CALL"
@@ -23,11 +24,16 @@ class Event(object):
         return self.id
 
     def _parse_symbol(self, string):
+        if string in parse_lookaside:
+            return parse_lookaside[string]
+
         try:
             sym = parser.parse(string)
+            parse_lookaside[string] = sym
             return sym
         except Exception as e:
             #dbg.debug('Exception when parsing : %s' % e)
+            parse_lookaside[string] = None
             return
 
 
