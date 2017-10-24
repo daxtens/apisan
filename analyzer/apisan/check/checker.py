@@ -80,6 +80,5 @@ class Checker(object):
                     nodes.append(node)
 
                     child = node.children[index]
-                    child.visited = False
                     indices.append(0)
                     nodes.append(child)

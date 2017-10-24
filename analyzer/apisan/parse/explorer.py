@@ -55,11 +55,10 @@ def is_call(node):
             and node.event.call is not None)
 
 class ExecNode(object):
+    __slots__ = ('children', 'event', 'cmgr')
     def __init__(self, node, children):
         assert node.tag == "NODE"
-        self._set_children(children)
-        self.parent = None
-        self.visited = False
+        self.children = children
         self.event = None
 
         for child in node:
@@ -85,12 +84,6 @@ class ExecNode(object):
             return AssumeEvent(node)
         else:
             raise ValueError("Unknown kind")
-
-    def _set_children(self, children):
-        # set parent-child relation
-        self.children = children
-        for child in children:
-            child.parent = self
 
     # debugging function
     def __str__(self, i=0):
