@@ -18,7 +18,9 @@ class CondChecker(Checker):
             if is_call(node):
                 call = node.event.call
                 code = node.event.code
-                cstr = cmgr.get(call, True)
+                cstr = cmgr.get(call)
+                if cstr:
+                    cstr = tuple(cstr)
                 # want to use as dictionary key
                 constraints = set()
                 for j in range(0, len(path)):
@@ -27,7 +29,9 @@ class CondChecker(Checker):
                     ff_node = path[j]
                     if is_call(ff_node):
                         ff_call = ff_node.event.call
-                        other_cstr = cmgr.get(ff_call, True)
+                        other_cstr = cmgr.get(ff_call)
+                        if other_cstr:
+                            other_cstr = tuple(other_cstr)
                         self.context.add((call.name, cstr), (ff_call.name, other_cstr), code)
 
     def _finalize_process(self):

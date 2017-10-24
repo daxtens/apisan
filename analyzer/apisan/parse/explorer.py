@@ -28,6 +28,22 @@ def get_all_files(in_d):
         files.append(fn)
     return files
 
+def feed_cmgr(cmgr, node):
+    # return newly allocated ConstraintMgr if changed
+    # otherwise return old one
+    event = node.event
+    if event.kind == EventKind.Assume:
+        cond = event.cond
+        if cond and cond.kind == SymbolKind.Constraint:
+            # XXX : latest gives false positives
+            if not cond.symbol in cmgr:
+                new = dict(cmgr)
+                new[cond.symbol] = cond.constraints
+                #print(new, cond.symbol, cond.constraints)
+                return new
+    return cmgr
+
+
 class ConstraintMgr(object):
     def __init__(self):
         self.constraints = dict()
@@ -119,7 +135,7 @@ class ExecTree(object):
     def _set_cmgr(self):
         stack = []
         stack.append((self.root, 0))
-        self.root.cmgr = ConstraintMgr()
+        self.root.cmgr = {}
 
         while stack:
             node, idx = stack.pop()
@@ -128,11 +144,7 @@ class ExecTree(object):
                 continue
             else:
                 child = node.children[idx]
-                cmgr = node.cmgr.feed(node)
-                if cmgr:
-                    child.cmgr = cmgr
-                else:
-                    child.cmgr = node.cmgr
+                child.cmgr = feed_cmgr(node.cmgr, node)
 
                 stack.append((node, idx + 1))
                 stack.append((child, 0))
