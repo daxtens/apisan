@@ -280,8 +280,8 @@ sub Analyze {
 
   my $is_path = 0;
   while (<FROM_CHILD>) {
-    print $ofh $_;
-    print STDERR $_;
+    #print $ofh $_;
+    #print STDERR $_;
 
     if (/^@.*_BEGIN/) {
       $is_path = 1;
